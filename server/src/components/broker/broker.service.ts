@@ -57,4 +57,79 @@ export class BrokersService {
         this.write_to_file()
         this.id++
     }
+
+    getBroker(body: any){
+        this.update_brokers()
+        for(let i = 0; i < this.brokers.length; i++){
+            if(this.brokers[i].id == body.id){
+                return this.brokers[i]
+            }
+        }
+        return null
+    }
+
+    changeName(body: any){
+        this.update_brokers()
+        for(let i = 0; i < this.brokers.length; i++){
+            if(this.brokers[i].id == body.id){
+                this.brokers[i].name = body.name
+                break
+            }
+        }
+        this.write_to_file()
+    }
+
+    getPersonalStocks(body: any){
+        const res = []
+        const file = JSON.parse(fs.readFileSync("./data/brokers_stocks.json").toString());
+        for(let i = 0; i < file.length; i++){
+            if(file[i].id === body.id){
+                for(let j = 0; j < body.stocks.length; j++){
+                    res.push(file[i][body.stocks[j]])
+                }
+                return {data: res}
+            }
+        }
+        return null
+    }
+
+    deal(body: any){
+        const stock_file = JSON.parse(fs.readFileSync("./data/brokers_stocks.json").toString());
+        this.update_brokers()
+        let broker_ind
+        for(let i = 0; i < this.brokers.length; i++){
+            if(body.id === this.brokers[i].id){
+                broker_ind = i
+                break
+            }
+        }
+        let status
+        for(let i = 0; i < stock_file.length; i++){
+            //console.log(body)
+            if(stock_file[i].id === body.id){
+                if(body.sum > this.brokers[broker_ind].balance){
+                    status = "no money"
+                }
+                else if(body.qty < 0 && Math.abs(body.qty) > stock_file[i][body.stock].qty) {
+                    status = "no stocks"
+                }
+                else {
+                    this.brokers[broker_ind].balance -= body.sum
+                    stock_file[i][body.stock].qty += body.qty
+                    stock_file[i][body.stock].balance -= body.sum
+                    status = "ok"
+                    fs.writeFileSync("./data/brokers_stocks.json", JSON.stringify(stock_file))
+                    this.write_to_file()
+                    return {status: status, balance: this.brokers[broker_ind].balance.toFixed(2),
+                        qty: stock_file[i][body.stock].qty, stock_balance: stock_file[i][body.stock].balance.toFixed(2)}
+                }
+                break
+            }
+        }
+
+
+        fs.writeFileSync("./data/brokers_stocks.json", JSON.stringify(stock_file))
+        this.write_to_file()
+        return {status: status}
+    }
 }

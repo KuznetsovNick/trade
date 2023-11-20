@@ -15,12 +15,14 @@ class Stock_graphics extends Component {
     componentDidMount() {
         let data = JSON.parse(localStorage.getItem("graphics_data"))
         this.socket = io("http://localhost:4000");
-        this.socket.on("message", (data) => {this.add_points(data)});
+        this.socket.on("message", (data) => {this.add_points(data)
+        console.log(data)});
         this.socket.emit("message", data);
         this.graphic()
     }
 
     add_points(data){
+        if(!data[0]) return
         for(let i = 0; i < this.props.trade_stock.length; i++){
             this.charts[i].data.datasets[0].data.push(data[i].open);
             this.charts[i].data.labels.push(data[i].date);
@@ -34,6 +36,7 @@ class Stock_graphics extends Component {
             if (!ctx) {
                 return;
             }
+
             let x = []
             let y = []
 

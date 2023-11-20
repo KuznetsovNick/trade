@@ -9,4 +9,20 @@ export declare class BrokersService {
     deleteBroker(body: any): void;
     changeBalance(body: any): void;
     addBroker(body: any): void;
+    getBroker(body: any): Broker;
+    changeName(body: any): void;
+    getPersonalStocks(body: any): {
+        data: any[];
+    };
+    deal(body: any): {
+        status: any;
+        balance: string;
+        qty: any;
+        stock_balance: any;
+    } | {
+        status: any;
+        balance?: undefined;
+        qty?: undefined;
+        stock_balance?: undefined;
+    };
 }

@@ -31,7 +31,7 @@ class BrokerCard extends Component {
                 balance: newBalance
             };
 
-            POST_REQUEST("/api/brokers/redact", data)
+            POST_REQUEST("/api/brokers/set_balance", data)
                 .then(() => {
                     this.navigation("/brokers_list");
                 });

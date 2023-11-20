@@ -21,10 +21,7 @@ class StockCard extends Component {
     componentDidMount() {
         POST_REQUEST("/api/stocks/info", this.props.stock)
             .then(res => res.json())
-            .then(json => {
-                this.props.setStockInfo(json);
-            });
-
+            .then(json => this.props.setStockInfo(json))
         if (this.chart != null) {
             this.chart.destroy();
         }
@@ -67,34 +64,36 @@ class StockCard extends Component {
         const stock = this.props.stock;
         const stock_info = this.props.stock_info;
         let table =[]
-        for(let i = stock_info.date.length-1; i >= 0; i--){
-            table.push(stock_info.date[i] + " - " + stock_info.open[i] + "$")
+        if(stock_info){
+            for(let i = stock_info.date.length-1; i >= 0; i--){
+                table.push(stock_info.date[i] + " - " + stock_info.open[i] + "$")
+            }
+            let key = 0
+
+            return (
+                <div>
+                    {stock.full}
+                    <div style={{ height: "15rem", width: "30rem"}}>
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    {this.graphic(365)}
+
+                    <div id="scroll_bar" style={{ height: "5rem", width: "30rem", overflowY: "scroll" }}>
+                        <ul id="info_table">
+                            {table.map(table => (
+                                <li key={key++}>
+                                    {table}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+
+                    <button onClick={() => this.navigation("/stocks_list")}>close</button>
+                    <button onClick={() => this.graphic(365)}>1 year</button>
+                    <button onClick={() => this.graphic(stock_info.date.length)}>5 year</button>
+                </div>
+            );
         }
-        let key = 0
-
-        return (
-            <div>
-                {stock.full}
-                <div style={{ height: "15rem", width: "30rem"}}>
-                    <canvas id="myChart"></canvas>
-                </div>
-                {this.graphic(365)}
-
-                <div id="scroll_bar" style={{ height: "5rem", width: "30rem", overflowY: "scroll" }}>
-                    <ul id="info_table">
-                        {table.map(table => (
-                            <li key={key++}>
-                                {table}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-
-                <button onClick={() => this.navigation("/stocks_list")}>close</button>
-                <button onClick={() => this.graphic(365)}>1 year</button>
-                <button onClick={() => this.graphic(stock_info.date.length)}>5 year</button>
-            </div>
-        );
     }
 }
 const mapStateToProps = state => ({

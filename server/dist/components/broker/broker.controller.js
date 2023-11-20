@@ -30,6 +30,19 @@ let BrokersController = class BrokersController {
         this.service.changeBalance(body);
         res.end();
     }
+    changeName(res, body) {
+        this.service.changeName(body);
+        res.end();
+    }
+    getPersonalStocks(res, body) {
+        res.json(this.service.getPersonalStocks(body));
+    }
+    deal(res, body) {
+        res.json(this.service.deal(body));
+    }
+    getBroker(res, body) {
+        res.send(this.service.getBroker(body));
+    }
     addBroker(res, body) {
         this.service.addBroker(body);
         res.end();
@@ -52,13 +65,45 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], BrokersController.prototype, "deleteBroker", null);
 __decorate([
-    (0, common_1.Post)("/redact"),
+    (0, common_1.Post)("/set_balance"),
     __param(0, (0, common_1.Res)()),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", void 0)
 ], BrokersController.prototype, "changeBalance", null);
+__decorate([
+    (0, common_1.Post)("/set_name"),
+    __param(0, (0, common_1.Res)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], BrokersController.prototype, "changeName", null);
+__decorate([
+    (0, common_1.Post)("/get_personal_stocks"),
+    __param(0, (0, common_1.Res)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], BrokersController.prototype, "getPersonalStocks", null);
+__decorate([
+    (0, common_1.Post)("/deal"),
+    __param(0, (0, common_1.Res)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], BrokersController.prototype, "deal", null);
+__decorate([
+    (0, common_1.Post)("/get_broker"),
+    __param(0, (0, common_1.Res)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", void 0)
+], BrokersController.prototype, "getBroker", null);
 __decorate([
     (0, common_1.Post)("/add_broker"),
     __param(0, (0, common_1.Res)()),
